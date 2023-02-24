@@ -26,6 +26,8 @@ from control_pcgrl.envs.probs.minecraft.minecraft_3D_holey_dungeon_prob import M
 from control_pcgrl.envs.probs.minecraft.minecraft_3D_Parkour_prob import Minecraft3DParkourProblem
 from control_pcgrl.envs.probs.minecraft.minecraft_3D_Parkour_ctrl_prob import Minecraft3DParkourCtrlProblem
 
+from control_pcgrl.envs.probs.minecraft.minecraft_2D_multiphase_prob import Minecraft2DmultiphaseProblem
+
 # all the problems should be defined here with its corresponding class
 PROBLEMS = {
     "binary": BinaryProblem,
@@ -52,4 +54,7 @@ PROBLEMS = {
     "minecraft_3D_dungeon_holey": Minecraft3DholeyDungeonProblem,
     "minecraft_3D_parkour": Minecraft3DParkourProblem,
     "minecraft_3D_parkour_ctrl": Minecraft3DParkourCtrlProblem,
+
+    "minecraft_2D_multiphase": Minecraft2DmultiphaseProblem,
+
 }

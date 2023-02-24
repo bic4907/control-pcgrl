@@ -74,8 +74,18 @@ class LegoProblemConfig(ProblemConfig):
 @dataclass
 class MinecraftProblemConfig(ProblemConfig):
     name: str = MISSING
-    map_shape: List[Any] = field(default_factory= lambda: [15, 15, 15])
-    crop_shape: List[Any] = field(default_factory= lambda: [30, 30, 30])
+    map_shape: List[Any] = field(default_factory= lambda: [15, 15])
+    crop_shape: List[Any] = field(default_factory= lambda: [30, 30])
+
+
+@dataclass
+class MinecraftMultiphaseConfig(MinecraftProblemConfig):
+    name: str = "minecraft_2D_multiphase"
+    weights: Dict[str, int] = field(default_factory = lambda: ({
+        'path-length': 30,
+        "regions": 100,
+    }))
+
 
 @dataclass
 class MinecraftMazeConfig(MinecraftProblemConfig):
@@ -102,9 +112,9 @@ class MinecraftHoleyMazeConfig(MinecraftProblemConfig):
 class MinecraftHoleyDungeonConfig(MinecraftProblemConfig):
     name: str = "minecraft_3D_dungeon_holey"
     weights: Dict[str, int] = field(default_factory = lambda: ({
-        "regions": 0, 
-        "path-length": 100, 
-        "chests": 300, 
+        "regions": 0,
+        "path-length": 100,
+        "chests": 300,
         "n_jump": 100,
         "enemies": 100,
         "nearest-enemy": 200,
@@ -152,26 +162,26 @@ class SharedPolicyConfig(MultiagentConfig):
 class HardwareConfig:
     n_cpu: int = MISSING
     n_gpu: int = MISSING
-    num_envs_per_worker: int = 60
+    num_envs_per_worker: int = 10
 
 @dataclass
 class LocalHardwareConfig(HardwareConfig):
-    n_cpu: int = 3
-    n_gpu: int = 1
+    n_cpu: int = 7
+    n_gpu: int = 0
 
 @dataclass
 class RemoteHardwareConfig(HardwareConfig):
-    n_cpu: int = 12
-    n_gpu: int = 1
+    n_cpu: int = 4
+    n_gpu: int = 0
 
 
 
 @dataclass
 class Config:
-    # Specify defaults for sub-configs so that we can override them on the command line. (Whereas we can cl-override 
+    # Specify defaults for sub-configs so that we can override them on the command line. (Whereas we can cl-override
     # other settings as-is.)
     defaults: List[Any] = field(default_factory=lambda: [
-        {'problem': 'binary_path'},
+        {'problem': 'minecraft_2D_multiphase'},
         {'hardware': 'remote'},
         # TODO: Picking the default should happen here, in the configs, instead of in the main code, perhaps.
         {'model': 'default_model'},
@@ -206,7 +216,7 @@ class Config:
     change_percentage: Optional[float] = None
     static_prob: Optional[float] = None
     action_size: Optional[List[Any]] = None
-    # action_size: List[Any] = field(default_factory=lambda: 
+    # action_size: List[Any] = field(default_factory=lambda:
     #     [3, 3]
     # )
 
@@ -232,6 +242,9 @@ cs.store(name="shared_policy", group="multiagent", node=SharedPolicyConfig)
 cs.store(name="binary_path", group="problem", node=BinaryPathConfig)
 cs.store(name="binary_path_control", group="problem", node=BinaryControlConfig)
 
+cs.store(name="minecraft_2D_multiphase", group="problem", node=MinecraftMultiphaseConfig)
+
+cs.store(name="minecraft_2D_maze", group="problem", node=MinecraftMazeConfig)
 cs.store(name="minecraft_3D_maze", group="problem", node=MinecraftMazeConfig)
 cs.store(name="minecraft_3D_holey_maze", group="problem", node=MinecraftHoleyMazeConfig)
 cs.store(name="minecraft_3D_dungeon_holey", group="problem", node=MinecraftHoleyDungeonConfig)

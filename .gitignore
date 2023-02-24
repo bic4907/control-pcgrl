@@ -81,3 +81,5 @@ discriminator.pt
 
 # Ignore wandb logs
 wandb/
+
+.idea
